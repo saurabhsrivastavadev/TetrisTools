@@ -1,0 +1,34 @@
+﻿@page "/login-tracker"
+
+@using System.DirectoryServices.AccountManagement
+
+
+<h2>Login Tracker</h2>
+
+<br/>
+<button class="btn btn-info" @onclick="GetLastLoginToMachine">Get Last Login</button>
+<br />
+<br />
+<p>Last login to machine: @_lastLogin</p>
+
+@code
+{
+    public string _lastLogin = "NA";
+
+    public async void GetLastLoginToMachine()
+    {
+        try
+        {
+            _lastLogin = "Fetching..";
+            Console.WriteLine("Fetching last logon details");
+            _lastLogin = await Task<string>.Run(() => {
+                return UserPrincipal.Current.LastLogon.ToString();
+            });
+            this.StateHasChanged();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Failed to get last logon info");
+        }
+    }
+}
