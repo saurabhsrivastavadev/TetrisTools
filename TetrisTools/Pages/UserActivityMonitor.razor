@@ -1,4 +1,4 @@
-﻿@page "/login-tracker"
+﻿@page "/user-activity-monitor"
 
 @using System.Diagnostics
 @using System.Runtime.InteropServices
@@ -6,20 +6,9 @@
 
 @inject TetrisTools.Services.UserActivityMonitoringService UAM
 
-<h2>User Activity Statistics</h2>
+<h2>User Activity Monitor</h2>
 
 <br/>
-<button class="btn btn-info" @onclick="ToggleUserActivityMonitoring">
-    @if (_isMonitoring)
-    {
-        <span>Stop Monitoring</span>
-    }
-    else
-    {
-        <span>Start Monitoring</span>
-    }
-</button>
-<br /><br />
 <button class="btn btn-info" @onclick="RefreshUserActivityStats">Refresh User Activity Statistics</button>
 <br />
 <br />
@@ -88,5 +77,21 @@
         _isMonitoring = !_isMonitoring;
 
         StateHasChanged();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!_isMonitoring)
+            {
+                UAM.StartUserActivityMonitoring();
+                _isMonitoring = true;
+            }
+
+            RefreshUserActivityStats();
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
     }
 }
