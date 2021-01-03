@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
-    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.7.0" />
+    <ProjectReference Include="..\..\DotNetUtils.Win32\DotNetUtils.Win32\DotNetUtils.Win32.csproj" />
   </ItemGroup>
 
 </Project>
