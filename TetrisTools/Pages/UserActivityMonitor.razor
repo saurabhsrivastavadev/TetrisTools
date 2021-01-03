@@ -13,7 +13,7 @@
 <br />
 <br />
 
-<table class="table table-sm table-dark">
+<table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">Activity State</th>
@@ -30,7 +30,7 @@
                 _stats.CompleteSessionList.Reverse();
                 foreach (var stat in _stats.CompleteSessionList)
                 {
-                    <tr>
+                    <tr class="@GetTableRowClass(stat)">
                         <td>@stat.ActivityState</td>
                         <td>@stat.SessionStartTime</td>
                         <td>@(stat.SessionEndTime == DateTime.MinValue? "Ongoing" : stat.SessionEndTime)</td>
@@ -93,5 +93,22 @@
         }
 
         return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private string GetTableRowClass(UserActivitySession session)
+    {
+        switch (session.ActivityState)
+        {
+            case UserActivityState.ACTIVE:
+                return "table-success";
+
+            case UserActivityState.INACTIVE:
+                return "table-warning";
+
+            case UserActivityState.UNMONITORED:
+                return "table-danger";
+        }
+
+        return "";
     }
 }
