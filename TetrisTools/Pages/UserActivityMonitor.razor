@@ -13,13 +13,24 @@
 <br />
 <br />
 
+<label for="statsDuration">Show Activity Stats for </label>
+<select name="statsDuration" id="statsDuration" @onchange="StatsDurationChanged">
+    <option value="24h">Last 24 Hours</option>
+    <option value="8h">Last 8 Hours</option>
+    <option value="1h">Last 1 Hour</option>
+    <option value="1w">Last 1 Week</option>
+</select>
+
+
+<br /><br />
+
 @if (_stats != null)
 {
-<p>
-    Total Active Time - <b>@GetTimeSpanString(_stats.TotalActiveTime)</b> <br />
-    Total Inactive Time - <b>@GetTimeSpanString(_stats.TotalInactiveTime)</b><br />
-    Total Unmonitored Time - <b>@GetTimeSpanString(_stats.TotalUnmonitoredTime)</b>
-</p>
+    <p>
+        Total Active Time - <b>@GetTimeSpanString(_stats.TotalActiveTime)</b> <br />
+        Total Inactive Time - <b>@GetTimeSpanString(_stats.TotalInactiveTime)</b><br />
+        Total Unmonitored Time - <b>@GetTimeSpanString(_stats.TotalUnmonitoredTime)</b>
+    </p>
     <br />
 }
 
@@ -63,12 +74,13 @@
 {
     private UserActivityStats _stats;
     private bool _isMonitoring = false;
+    private TimeSpan _statsDuration = TimeSpan.FromDays(1);
 
     public async void RefreshUserActivityStats()
     {
         // todo - update the UI to accept stats duration from user
         _stats = await UAM.GetUserActivityStatsAsync(
-            DateTime.Now - TimeSpan.FromDays(1), DateTime.Now);
+            DateTime.Now - _statsDuration, DateTime.Now);
 
         StateHasChanged();
     }
@@ -103,6 +115,30 @@
         }
 
         return base.OnAfterRenderAsync(firstRender);
+    }
+
+    public void StatsDurationChanged(ChangeEventArgs e)
+    {
+        string statsDuration = e.Value.ToString();
+
+        if (statsDuration == "24h")
+        {
+            _statsDuration = TimeSpan.FromHours(24);
+        }
+        if (statsDuration == "8h")
+        {
+            _statsDuration = TimeSpan.FromHours(8);
+        }
+        if (statsDuration == "1h")
+        {
+            _statsDuration = TimeSpan.FromHours(1);
+        }
+        if (statsDuration == "1w")
+        {
+            _statsDuration = TimeSpan.FromHours(24*7);
+        }
+
+        RefreshUserActivityStats();
     }
 
     private string GetTableRowClass(UserActivitySession session)
