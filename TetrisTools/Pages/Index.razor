@@ -1,7 +1,33 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<h1>Tetris Tools</h1>
 
-Welcome to your new app.
+<p>
+    A suite of desktop apps focused on a variety of topics. <br />
+    A brief description for all modules below.
+</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<br />
+
+<div class="card text-white bg-info mb-3"
+     style="max-width: 28rem; cursor: pointer;"
+     onclick="location.href='user-activity-monitor'">
+    <div class="card-header">
+        <span class="oi oi-vertical-align-bottom mr-2" aria-hidden="true"></span>
+        User Activity Monitor
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">How much did you work today ?</h5>
+        <p class="card-text">
+            Tool to monitor user activity. View statistics about how often and for how long
+            you interacted with the system. <br/>
+            Bottom layer of monitoring is to track these 3 states, and prepare statistics
+            on top of these.
+            <ul>
+                <li>Active state - User is actively interacting with the system.</li>
+                <li>Inactive state - User has not interacted with the system for certain threshold.</li>
+                <li>Unmonitored state - This app is not running to monitor the user activity.</li>
+            </ul>
+        </p>
+    </div>
+</div>
