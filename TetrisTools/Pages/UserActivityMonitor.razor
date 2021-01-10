@@ -11,11 +11,11 @@
 
 <div class="container">
     <div class="row">
-        <div class="column pr-4">
+        <div class="column">
             <label for="statsDuration">Show Activity Stats for </label>
             <select name="statsDuration" id="statsDuration" @onchange="StatsDurationChanged">
-                <option value="24h">Last 24 Hours</option>
                 <option value="8h">Last 8 Hours</option>
+                <option value="24h">Last 24 Hours</option>
                 <option value="1h">Last 1 Hour</option>
                 <option value="1w">Last 1 Week</option>
             </select>
@@ -78,7 +78,7 @@
 {
     private UserActivityStats _stats;
     private bool _isMonitoring = false;
-    private TimeSpan _statsDuration = TimeSpan.FromDays(1);
+    private TimeSpan _statsDuration = TimeSpan.FromHours(8);
 
     public async void RefreshUserActivityStats()
     {
@@ -108,21 +108,17 @@
     {
         string statsDuration = e.Value.ToString();
 
-        if (statsDuration == "24h")
+        if (statsDuration.Last() == 'h')
         {
-            _statsDuration = TimeSpan.FromHours(24);
+            _statsDuration = TimeSpan.FromHours(int.Parse(statsDuration[0..^1]));
         }
-        if (statsDuration == "8h")
+        if (statsDuration.Last() == 'd')
         {
-            _statsDuration = TimeSpan.FromHours(8);
+            _statsDuration = TimeSpan.FromDays(int.Parse(statsDuration[0..^1]));
         }
-        if (statsDuration == "1h")
+        if (statsDuration.Last() == 'w')
         {
-            _statsDuration = TimeSpan.FromHours(1);
-        }
-        if (statsDuration == "1w")
-        {
-            _statsDuration = TimeSpan.FromHours(24*7);
+            _statsDuration = TimeSpan.FromDays(int.Parse(statsDuration[0..^1]) * 7);
         }
 
         RefreshUserActivityStats();
