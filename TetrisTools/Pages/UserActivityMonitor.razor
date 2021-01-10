@@ -82,25 +82,8 @@
 
     public async void RefreshUserActivityStats()
     {
-        // todo - update the UI to accept stats duration from user
         _stats = await UAM.GetUserActivityStatsAsync(
             DateTime.Now - _statsDuration, DateTime.Now);
-
-        StateHasChanged();
-    }
-
-    public async void ToggleUserActivityMonitoring()
-    {
-        if (_isMonitoring)
-        {
-            await UAM.StopUserActivityMonitoring();
-        }
-        else
-        {
-            await UAM.StartUserActivityMonitoring();
-        }
-
-        _isMonitoring = !_isMonitoring;
 
         StateHasChanged();
     }

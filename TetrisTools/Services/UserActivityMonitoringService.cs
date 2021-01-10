@@ -7,24 +7,24 @@ namespace TetrisTools.Services
 {
     public class UserActivityMonitoringService
     {
-        private IUserActivityMonitor UserActivityMonitor =
-            new UserActivityMonitor("TetrisTools");
+        private IUserActivityMonitor UAM { get; } =
+                    UserActivityMonitor.GetInstance("TetrisTools");
 
         public Task<UserActivityStats> GetUserActivityStatsAsync(
                                             DateTime statsFrom, DateTime statsTo)
         {
             return Task.FromResult(
-                UserActivityMonitor.GetUserActivityStats(statsFrom, statsTo));
+                UAM.GetUserActivityStats(statsFrom, statsTo));
         }
 
         public Task StartUserActivityMonitoring()
         {
-            return Task.Run(() => UserActivityMonitor.StartMonitoring());
+            return Task.Run(() => UAM.StartMonitoring());
         }
 
         public Task StopUserActivityMonitoring()
         {
-            return Task.Run(() => UserActivityMonitor.StopMonitoring());
+            return Task.Run(() => UAM.StopMonitoring());
         }
     }
 }
