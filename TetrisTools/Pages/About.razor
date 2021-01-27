@@ -1,0 +1,43 @@
+﻿@page "/about"
+
+@using System.Diagnostics
+@using System.Runtime.InteropServices
+@using DotNetUtils.Win32.UserActivity
+@using System.Reflection
+
+@inject TetrisTools.Services.UserActivityMonitoringService UAM
+
+<h2>Tetris Tools</h2>
+<br />
+
+<div class="shadow p-3 mb-5 bg-white rounded" style="max-width: 500px;">
+    <h4>Release Info</h4>
+    <p>Current Version - @Version</p>
+    <button class="btn btn-primary">Check for updates</button>
+</div>
+
+<div class="shadow p-3 mb-5 bg-white rounded" style="max-width: 500px;">
+    <h4>Contact</h4>
+    <p>
+        Saurabh Srivastava <br />
+        sobu86@outlook.com
+    </p>
+</div>
+
+@code {
+
+    private string _version;
+    private string Version
+    {
+        get
+        {
+            if (_version == null)
+            {
+                _version = Assembly.GetExecutingAssembly().
+                            GetCustomAttribute<AssemblyInformationalVersionAttribute>().
+                                InformationalVersion;
+            }
+            return _version;
+        }
+    }
+}
