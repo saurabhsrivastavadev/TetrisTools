@@ -17,10 +17,15 @@
     <p>
         Current Version - @Version
     </p>
-    <p>
-        Latest Available Version - @LatestVersion <br/>
-        <a href="@LatestVersionUrl" target="_blank">@LatestVersionUrl</a>
-    </p>
+
+    @if (!string.IsNullOrWhiteSpace(LatestVersion))
+    {
+        <p>
+            Latest Available Version - @LatestVersion <br />
+            <a href="@LatestVersionUrl" target="_blank">@LatestVersionUrl</a>
+        </p>
+    }
+    <button class="btn btn-info" @onclick="() => UpdateLatestRepoRelease()">Fetch Latest Release Info</button>
 </div>
 
 <div class="shadow p-3 mb-5 bg-white rounded" style="max-width: 500px;">
@@ -51,11 +56,11 @@
     private string LatestVersion;
     private string LatestVersionUrl;
 
-    protected override async Task OnInitializedAsync()
+    private async void UpdateLatestRepoRelease()
     {
         var latestRelease = await GitHubApi.GetLatestRepoRelease("sobu86", "TetrisTools");
         LatestVersion = latestRelease.TagName;
         LatestVersionUrl = latestRelease.HtmlUrl;
-        await base.OnInitializedAsync();
+        StateHasChanged();
     }
 }

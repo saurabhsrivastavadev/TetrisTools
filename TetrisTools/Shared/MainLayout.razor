@@ -1,11 +1,37 @@
 ﻿@inherits LayoutComponentBase
 
+@inject NavigationManager NavManager
+
 <div class="sidebar">
     <NavMenu />
 </div>
 
 <div class="main">
     <div class="content px-4">
+        <div class="container-fluid mb-2">
+            <div class="row">
+                <div class="column">
+                    <h2>@GetTitle()</h2>
+                </div>
+            </div>
+        </div>
         @Body
     </div>
 </div>
+
+@code {
+
+    private string GetTitle()
+    {
+        string relativePath = NavManager.ToBaseRelativePath(NavManager.Uri);
+        if (relativePath.StartsWith("user-activity-monitor/stats"))
+        {
+            return "User Activity Monitor >> Stats";
+        }
+        if (relativePath.StartsWith("user-activity-monitor"))
+        {
+            return "User Activity Monitor";
+        }
+        return "Unknown Route";
+    }
+}

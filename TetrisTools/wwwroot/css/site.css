@@ -199,3 +199,7 @@ app {
 .png-color-white {
     filter: invert(99%) sepia(99%) saturate(2%) hue-rotate(127deg) brightness(107%) contrast(101%);
 }
+
+.hidden {
+    display: none;
+}

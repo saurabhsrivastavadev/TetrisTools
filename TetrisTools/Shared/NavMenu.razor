@@ -1,6 +1,9 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject NavigationManager NavManager
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">
-        <img src="tetris-tools.png" width="25" height="25" class="d-inline-block align-top png-color-white mr-2">
+        <img src="tetris-tools.png" width="25" height="25"
+             class="d-inline-block align-top png-color-white mr-2">
         Tetris Tools
     </a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -11,26 +14,133 @@
 <div class="@NavMenuCssClass">
     @*<input class="form-control" placeholder="Search menu items" />*@
     <ul class="nav flex-column" @onclick="ToggleNavMenu">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="user-activity-monitor">
-                <span class="oi oi-vertical-align-bottom" aria-hidden="true"></span> User Activity Monitor
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="about">
-                <span class="oi oi-info" aria-hidden="true"></span> About
-            </NavLink>
-        </li>
+
+        @foreach (var navItem in NavItemList)
+        {
+            <li class="nav-item px-2 @(navItem.Parent != null ? "align-self-end" : "") @(navItem.IsVisible? "" : "hidden")"
+                @onclick="() => OnNavItemClicked(navItem)">
+                <NavLink class="nav-link" href="@navItem.Href">
+                    <span class="@navItem.Icon" aria-hidden="true"></span>
+                    @navItem.Text
+                </NavLink>
+            </li>
+        }
+
     </ul>
 </div>
 
-@code {
+@code
+{
+    private class AppNavItem
+    {
+        public string Text { get; set; }
+        public string Href { get; set; }
+        public string Icon { get; set; }
+        public AppNavItem Parent { get; set; }
+        public bool IsVisible { get; set; }
+    }
+
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    // Navigation Items
+    private static AppNavItem UserActivityNavItem { get; set; }
+    private static AppNavItem UserActivityStatsNavItem { get; set; }
+    private static AppNavItem UserActivitySettingsNavItem { get; set; }
+    private static AppNavItem AboutNavItem { get; set; }
+    private static List<AppNavItem> NavItemList { get; set; }
+
+    public NavMenu()
+    {
+        if (NavItemList == null)
+        {
+            UserActivityNavItem = new AppNavItem
+            {
+                Text = "User Activity Monitor",
+                Href = "user-activity-monitor",
+                Icon = "oi oi-vertical-align-bottom",
+                Parent = null,
+                IsVisible = true
+            };
+
+            UserActivityStatsNavItem = new AppNavItem
+            {
+                Text = "Statistics",
+                Href = "user-activity-monitor/stats",
+                Icon = "oi oi-graph",
+                Parent = UserActivityNavItem,
+                IsVisible = true
+            };
+
+            UserActivitySettingsNavItem = new AppNavItem
+            {
+                Text = "Settings",
+                Href = "user-activity-monitor/settings",
+                Icon = "oi oi-wrench",
+                Parent = UserActivityNavItem,
+                IsVisible = true
+            };
+
+            AboutNavItem = new AppNavItem
+            {
+                Text = "About",
+                Href = "about",
+                Icon = "oi oi-info",
+                Parent = null,
+                IsVisible = true
+            };
+
+            NavItemList = new List<AppNavItem>
+            {
+                UserActivityNavItem,
+                UserActivityStatsNavItem,
+                UserActivitySettingsNavItem,
+                AboutNavItem
+            };
+        }
+    }
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void OnNavItemClicked(AppNavItem navItemClicked)
+    {
+        Console.WriteLine($"OnNavItemClicked {navItemClicked} {navItemClicked?.Text}");
+        foreach (var navItem in NavItemList)
+        {
+            navItem.IsVisible =
+                (navItem.Parent == null ||
+                    navItem.Parent == navItemClicked ||
+                    navItem.Parent == navItemClicked.Parent ||
+                    navItem == navItemClicked);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        var navItem = GetNavItemFromCurrentUrl();
+        if (navItem != null)
+        {
+            OnNavItemClicked(GetNavItemFromCurrentUrl());
+        }
+        base.OnInitialized();
+    }
+
+    private AppNavItem GetNavItemFromCurrentUrl()
+    {
+        string relativePath = NavManager.ToBaseRelativePath(NavManager.Uri);
+
+        foreach (var navItem in NavItemList)
+        {
+            if (relativePath == navItem.Href)
+            {
+                return navItem;
+            }
+        }
+
+        return null;
     }
 }
