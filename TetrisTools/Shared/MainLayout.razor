@@ -28,10 +28,19 @@
         {
             return "User Activity Monitor >> Stats";
         }
-        if (relativePath.StartsWith("user-activity-monitor"))
+        else if (relativePath.StartsWith("user-activity-monitor/settings"))
+        {
+            return "User Activity Monitor >> Settings";
+        }
+        else if (relativePath.StartsWith("user-activity-monitor"))
         {
             return "User Activity Monitor";
         }
+        else if (relativePath.StartsWith("about"))
+        {
+            return "About Tetris Tools";
+        }
+
         return "Unknown Route";
     }
 }

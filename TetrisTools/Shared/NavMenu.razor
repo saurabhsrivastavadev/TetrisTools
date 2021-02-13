@@ -117,6 +117,7 @@
                     navItem.Parent == navItemClicked.Parent ||
                     navItem == navItemClicked);
         }
+        StateHasChanged();
     }
 
     protected override void OnInitialized()
@@ -126,6 +127,10 @@
         {
             OnNavItemClicked(GetNavItemFromCurrentUrl());
         }
+        NavManager.LocationChanged += (sender, args) =>
+        {
+            OnNavItemClicked(GetNavItemFromCurrentUrl());
+        };
         base.OnInitialized();
     }
 
