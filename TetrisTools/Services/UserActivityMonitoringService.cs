@@ -13,6 +13,7 @@ namespace TetrisTools.Services
         public Task<UserActivityStats> GetUserActivityStatsAsync(
                                             DateTime statsFrom, DateTime statsTo)
         {
+            Console.WriteLine($"====> Fetching user activity for last {statsTo - statsFrom}");
             return Task.FromResult(
                 UAM.GetUserActivityStats(statsFrom, statsTo));
         }
