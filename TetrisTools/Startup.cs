@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElectronNET.API;
 using GitHubApiUtils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -61,6 +62,12 @@ namespace TetrisTools
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            // Open the electron window
+            if (HybridSupport.IsElectronActive)
+            {
+                Task.Run(async () => await Electron.WindowManager.CreateWindowAsync());
+            }
         }
     }
 }
