@@ -157,17 +157,16 @@
 
     private string GetTimeSpanString(TimeSpan timespan)
     {
-        string timespanFormat = "%h' Hours, '%m' Minutes, '%s' Seconds.'";
-
-        if (timespan.TotalMinutes < 60)
+        string timespanString = $"{timespan.Seconds} Seconds.";
+        if (timespan.TotalSeconds >= 60)
         {
-            timespanFormat = "%m' Minutes, '%s' Seconds.'";
+            timespanString = $"{timespan.Minutes} Minutes, {timespanString}";
         }
-        if (timespan.TotalSeconds < 60)
+        if (timespan.TotalMinutes >= 60)
         {
-            timespanFormat = "%s' Seconds.'";
+            timespanString = $"{(int)timespan.TotalHours} Hours, {timespanString}";
         }
 
-        return timespan.ToString(timespanFormat);
+        return timespanString;
     }
 }
