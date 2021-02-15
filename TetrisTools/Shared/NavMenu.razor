@@ -109,15 +109,18 @@
     private void OnNavItemClicked(AppNavItem navItemClicked)
     {
         Console.WriteLine($"OnNavItemClicked {navItemClicked} {navItemClicked?.Text}");
-        foreach (var navItem in NavItemList)
+        if (navItemClicked != null)
         {
-            navItem.IsVisible =
-                (navItem.Parent == null ||
-                    navItem.Parent == navItemClicked ||
-                    navItem.Parent == navItemClicked.Parent ||
-                    navItem == navItemClicked);
+            foreach (var navItem in NavItemList)
+            {
+                navItem.IsVisible =
+                    (navItem.Parent == null ||
+                        navItem.Parent == navItemClicked ||
+                        navItem.Parent == navItemClicked.Parent ||
+                        navItem == navItemClicked);
+            }
+            StateHasChanged();
         }
-        StateHasChanged();
     }
 
     protected override void OnInitialized()

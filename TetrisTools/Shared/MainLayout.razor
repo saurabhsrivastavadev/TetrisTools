@@ -24,7 +24,12 @@
     private string GetTitle()
     {
         string relativePath = NavManager.ToBaseRelativePath(NavManager.Uri);
-        if (relativePath.StartsWith("user-activity-monitor/stats"))
+
+        if (string.IsNullOrWhiteSpace(relativePath))
+        {
+            return "Tetris Tools";
+        }
+        else if (relativePath.StartsWith("user-activity-monitor/stats"))
         {
             return "User Activity Monitor >> Stats";
         }
